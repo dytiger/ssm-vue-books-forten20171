@@ -24,6 +24,7 @@
             <th>原价</th>
             <th>页数</th>
             <th>出版日期</th>
+            <th>出版日期</th>
         </tr>
         </thead>
         <tbody>
@@ -37,6 +38,7 @@
             <td>{{b.price | showPrice('￥','元')}}</td>
             <td>{{b.page}}</td>
             <td>{{b.pubDateStr}}</td>
+            <td><button :data-id="b.id" @click="showId">{{b.id}}</button></td>
         </tr>
         </tbody>
     </table>
@@ -71,6 +73,9 @@
                 }).catch(function (err) {
                     console.log(err);
                 });
+            },
+            showId:function(event){
+                alert(event.target.getAttribute('data-id'));
             }
         },filters:{
             showDiscount:function(discount){
