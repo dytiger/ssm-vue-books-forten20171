@@ -45,17 +45,6 @@
 <script src="../js/jquery-3.2.1.js"></script>
 <script src="../js/vue.js"></script>
 <script>
-    Vue.component('datarow', {
-//        template: '<tr><td>{{b.name}}</td>' +
-//        '<td>{{b.author}}</td>' +
-//        '<td>{{b.publisher}}</td>' +
-//        '<td>{{b.price}}</td>' +
-//        '<td>{{b.discount}}</td>' +
-//        '<td>{{b.finalPrice}}</td>' +
-//        '<td>{{b.pubDate}}</td>' +
-//        '<td>{{b.page}}</td></tr>'
-        template:'<tr><td>{{b}}</td></tr>'
-    });
     var vm = new Vue({
         el: '#my-div',
         data: {
@@ -89,6 +78,7 @@
             }
         }
     });
+    // 全局过滤器
     Vue.filter('showPrice',function(price,sign,unit){
         return sign + price + unit;
     })
