@@ -12,21 +12,34 @@
         <input v-model="search.maxPrice"/>
         <button type="button" @click="showData">查询</button>
     </form>
-    <table border="1" v-if="books.length>0">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>最终价格</th>
+            <th>折扣</th>
+            <th>原价</th>
+            <th>页数</th>
+            <th>出版日期</th>
+        </tr>
+        </thead>
         <tbody>
-        <tr v-for="b in books">
+        <tr v-for="(b,index) in books">
+            <td>{{index+1}}</td>
             <td>{{b.name}}</td>
             <td>{{b.author}}</td>
             <td>{{b.publisher}}</td>
-            <td>{{b.price}}</td>
-            <td>{{b.discount}}</td>
-            <td>{{b.finalPrice}}</td>
-            <td>{{b.pubDate}}</td>
+            <td>{{b.finalPrice | showPrice('￥','元')}}</td>
+            <td>{{b.discount | showDiscount}}</td>
+            <td>{{b.price | showPrice('￥','元')}}</td>
             <td>{{b.page}}</td>
+            <td>{{b.pubDateStr}}</td>
         </tr>
         </tbody>
     </table>
-    <div v-else>NoData</div>
 </div>
 <script src="../js/axios.js"></script>
 <script src="../js/jquery-3.2.1.js"></script>
@@ -49,25 +62,36 @@
             search: {},
             books: []
         },
+//        created:function(){
+//            this.showData();
+//        },
+        mounted:function(){
+            this.$nextTick(function(){
+                this.showData();
+            });
+        },
         methods: {
             showData: function () {
-                var _this = this;
-                console.log(_this.search.minPrice);
-                console.log(_this.search.maxPrice);
+                console.log(this.search);
                 axios({
                     method: "POST",
                     url: 'list.do',
-                    data: this.search
+                    data: vm.search
                 }).then(function (response) {
                     vm.books = response.data;
                 }).catch(function (err) {
                     console.log(err);
                 });
             }
-        },created:function(){
-            this.showData();
+        },filters:{
+            showDiscount:function(discount){
+                return (discount*10) + "折";
+            }
         }
     });
+    Vue.filter('showPrice',function(price,sign,unit){
+        return sign + price + unit;
+    })
 </script>
 </body>
 </html>

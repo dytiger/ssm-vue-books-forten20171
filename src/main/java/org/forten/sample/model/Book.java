@@ -2,6 +2,7 @@ package org.forten.sample.model;
 
 import java.util.Date;
 
+import org.forten.utils.common.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Book {
@@ -98,6 +99,14 @@ public class Book {
 		double p = this.price * this.discount;
 		String nf = String.format("%.2f", p);
 		return nf;
+	}
+
+	public String getPubDateStr(){
+		if(pubDate==null){
+			return "";
+		}else{
+			return DateUtil.convertDateToString(pubDate,"yyyy年MM月dd日");
+		}
 	}
 
 	@Override
