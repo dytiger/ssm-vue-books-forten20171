@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vue基础教程_唯实讲堂_www.ForTen.org</title>
+</head>
+<body>
+<div id="my-div">
+    <form>
+        <input v-model="search.name"/>
+        <input v-model="search.minPrice"/>
+        <input v-model="search.maxPrice"/>
+        <button type="button" @click="showData">查询</button>
+    </form>
+    <table border="1" v-if="books.length>0">
+        <tbody>
+        <tr v-for="b in books">
+            <td>{{b.name}}</td>
+            <td>{{b.author}}</td>
+            <td>{{b.publisher}}</td>
+            <td>{{b.price}}</td>
+            <td>{{b.discount}}</td>
+            <td>{{b.finalPrice}}</td>
+            <td>{{b.pubDate}}</td>
+            <td>{{b.page}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div v-else>NoData</div>
+</div>
+<script src="../js/axios.js"></script>
+<script src="../js/jquery-3.2.1.js"></script>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.component('datarow', {
+//        template: '<tr><td>{{b.name}}</td>' +
+//        '<td>{{b.author}}</td>' +
+//        '<td>{{b.publisher}}</td>' +
+//        '<td>{{b.price}}</td>' +
+//        '<td>{{b.discount}}</td>' +
+//        '<td>{{b.finalPrice}}</td>' +
+//        '<td>{{b.pubDate}}</td>' +
+//        '<td>{{b.page}}</td></tr>'
+        template:'<tr><td>{{b}}</td></tr>'
+    });
+    var vm = new Vue({
+        el: '#my-div',
+        data: {
+            search: {},
+            books: []
+        },
+        methods: {
+            showData: function () {
+                var _this = this;
+                console.log(_this.search.minPrice);
+                console.log(_this.search.maxPrice);
+                axios({
+                    method: "POST",
+                    url: 'list.do',
+                    data: this.search
+                }).then(function (response) {
+                    vm.books = response.data;
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }
+        },created:function(){
+            this.showData();
+        }
+    });
+</script>
+</body>
+</html>
