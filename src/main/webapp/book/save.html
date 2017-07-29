@@ -30,7 +30,7 @@
         <div>
             <label>折扣</label>
             <input min="0.01" max="1.0" step="0.01" v-model="book.discount" type="range"/>
-            <span>{{book.discount}}</span>
+            <span>{{book.discount | showDiscount}}</span>
         </div>
         <div>
             <label>出版日期</label>
@@ -39,12 +39,6 @@
         <div>
             <button type="button" @click="save">提交</button>
         </div>
-    </form>
-    <form>
-        <input v-model="search.name"/>
-        <input v-model="search.minPrice"/>
-        <input v-model="search.maxPrice"/>
-        <button type="button" @click="list">查询</button>
     </form>
 </div>
 <script src="../js/axios.js"></script>
@@ -69,6 +63,10 @@
                 }).catch(function (err) {
                     console.log(err);
                 });
+            }
+        },filters:{
+            showDiscount:function(discount){
+                return (discount*10).toFixed(1) + "折";
             }
         }
     });
