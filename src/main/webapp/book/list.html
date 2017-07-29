@@ -53,23 +53,23 @@
             search: {},
             books: []
         },
-//        created:function(){
-//            this.showData();
-//        },
-        mounted:function(){
-            this.$nextTick(function(){
-                this.showData();
-            });
+        created:function(){
+            this.showData();
         },
+//        mounted:function(){
+//            this.$nextTick(function(){
+//                this.showData();
+//            });
+//        },
         methods: {
             showData: function () {
                 console.log(this.search);
                 axios({
                     method: "POST",
                     url: 'list.do',
-                    data: vm.search
-                }).then(function (response) {
-                    vm.books = response.data;
+                    data: this.search
+                }).then((res)=> {
+                    this.books = res.data;
                 }).catch(function (err) {
                     console.log(err);
                 });
