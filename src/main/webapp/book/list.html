@@ -11,6 +11,7 @@
         <input v-model="search.minPrice"/>
         <input v-model="search.maxPrice"/>
         <button type="button" @click="showData">查询</button>
+        <button type="button" @click="del">删除</button>
     </form>
     <table border="1">
         <thead>
@@ -24,7 +25,7 @@
             <th>原价</th>
             <th>页数</th>
             <th>出版日期</th>
-            <th>出版日期</th>
+            <th><input type="checkbox" @change="toggleSelect"/></th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +39,9 @@
             <td>{{b.price | showPrice('￥','元')}}</td>
             <td>{{b.page}}</td>
             <td>{{b.pubDateStr}}</td>
-            <td><button :data-id="b.id" @click="showId">{{b.id}}</button></td>
+            <td>
+                <input type="checkbox" v-model="ids" :value="b.id" name="ids"/>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -51,16 +54,12 @@
         el: '#my-div',
         data: {
             search: {},
-            books: []
+            books: [],
+            ids: []
         },
-        created:function(){
+        created: function () {
             this.showData();
         },
-//        mounted:function(){
-//            this.$nextTick(function(){
-//                this.showData();
-//            });
-//        },
         methods: {
             showData: function () {
                 console.log(this.search);
@@ -68,23 +67,56 @@
                     method: "POST",
                     url: 'list.do',
                     data: this.search
-                }).then((res)=> {
+                }).then((res) => {
                     this.books = res.data;
                 }).catch(function (err) {
                     console.log(err);
                 });
             },
-            showId:function(event){
-                alert(event.target.getAttribute('data-id'));
+            toggleSelect: function (event) {
+                var saInput = event.target;
+                this.ids = [];
+                if (saInput.checked) {
+                    var idChecks = document.getElementsByName('ids');
+                    for (var i = 0; i < idChecks.length; i++) {
+                        this.ids.push(idChecks[i].value);
+                    }
+                }
+            }, del: function () {
+                if (this.ids.length > 0) {
+                    console.log(this.ids.join(','));
+                    axios({
+                        method: "POST",
+                        url: 'delete.do',
+                        data: this.ids
+                    }).then((res) => {
+                        for (var i = 0; i < this.ids.length; i++) {
+                            for (var j = 0; j < this.books.length; j++) {
+                                if (this.books[j].id == this.ids[i]) {
+                                    this.books.splice(j, 1);
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            }
+                        }
+                        this.ids=[];
+                        alert(res.data.message);
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                }else{
+                    alert("请选择要被删除的数据。");
+                }
             }
-        },filters:{
-            showDiscount:function(discount){
-                return (discount*10) + "折";
+        }, filters: {
+            showDiscount: function (discount) {
+                return (discount * 10) + "折";
             }
         }
     });
     // 全局过滤器
-    Vue.filter('showPrice',function(price,sign,unit){
+    Vue.filter('showPrice', function (price, sign, unit) {
         return sign + price + unit;
     })
 </script>

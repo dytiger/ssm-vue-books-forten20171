@@ -20,4 +20,12 @@ public interface BookMapper {
 	})
 	@SelectProvider(type = BookSql.class,method = "getSql")
 	List<Book> selectBy(BookQo qo);
+
+	@Delete("<script>" +
+			"DELETE FROM test_book WHERE id IN " +
+			"<foreach collection='array' item='id' open='(' separator=',' close=')'>" +
+			"#{id}" +
+			"</foreach>"+
+			"</script>")
+	int delete(int[] id);
 }

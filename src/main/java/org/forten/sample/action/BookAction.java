@@ -16,20 +16,28 @@ import java.util.List;
 @Controller
 @RequestMapping("/book")
 public class BookAction {
-	@Resource
-	private BookBo bo;
-	
-	@RequestMapping("save")
-	public @ResponseBody
-	Message
-	save(@RequestBody Book book){
-		int i = bo.doSave(book);
-		return Message.info("插入了"+i+"条数据。");
-	}
+    @Resource
+    private BookBo bo;
 
-	@RequestMapping("list")
-	public @ResponseBody
-	List<Book> list(@RequestBody BookQo qo){
-		return bo.queryBy(qo);
-	}
+    @RequestMapping("save")
+    public @ResponseBody
+    Message
+    save(@RequestBody Book book) {
+        int i = bo.doSave(book);
+        return Message.info("插入了" + i + "条数据。");
+    }
+
+    @RequestMapping("list")
+    public @ResponseBody
+    List<Book> list(@RequestBody BookQo qo) {
+        return bo.queryBy(qo);
+    }
+
+    @RequestMapping("delete")
+    public @ResponseBody
+    Message
+    delete(@RequestBody int[] ids) {
+        int i = bo.doDelete(ids);
+        return Message.info("成功删除了" + i + "条数据。");
+    }
 }
