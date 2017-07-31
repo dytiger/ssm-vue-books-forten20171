@@ -36,7 +36,7 @@ public class BookAction {
     @RequestMapping("delete")
     public @ResponseBody
     Message
-    delete(@RequestBody int[] ids) {
+    delete(@RequestBody int... ids) {
         int i = bo.doDelete(ids);
         return Message.info("成功删除了" + i + "条数据。");
     }

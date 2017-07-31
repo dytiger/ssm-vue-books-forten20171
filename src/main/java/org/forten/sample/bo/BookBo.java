@@ -31,7 +31,7 @@ public class BookBo {
     }
 
     @Transactional
-    public int doDelete(int[] ids) {
+    public int doDelete(int... ids) {
         BookMapper bm = dao.getMapper(BookMapper.class);
         return bm.delete(ids);
     }

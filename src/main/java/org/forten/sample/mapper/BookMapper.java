@@ -27,5 +27,5 @@ public interface BookMapper {
 			"#{id}" +
 			"</foreach>"+
 			"</script>")
-	int delete(int[] id);
+	int delete(int... ids);
 }
